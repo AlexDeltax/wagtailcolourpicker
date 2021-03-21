@@ -1,10 +1,8 @@
-from django.conf import settings
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.urls import reverse, path, include
-from django.utils.html import format_html_join, format_html
+from django.utils.html import format_html
 from django.utils.translation import ugettext as _
 
-import wagtail.admin.rich_text.editors.draftail.features as draftail_features
+from wagtail.admin.rich_text.editors.draftail import features as draftail_features
 from wagtail.core import hooks
 
 from wagtailcolourpicker.conf import get_setting
@@ -19,32 +17,9 @@ def register_admin_urls():
     ]
 
 
-@hooks.register('insert_editor_css')
-def editor_css():
-    css_files = [
-        'colourpicker/css/colourpicker.css',
-    ]
-    css_includes = format_html_join(
-        '\n',
-        '<link rel="stylesheet" href="{0}">',
-        ((static(filename), ) for filename in css_files)
-    )
-    return css_includes
-
-
 @hooks.register('insert_editor_js')
 def insert_editor_js():
-    js_files = [
-        # We require this file here to make sure it is loaded before the other.
-        'wagtailadmin/js/draftail.js',
-        'colourpicker/js/colourpicker.js',
-    ]
-    js_includes = format_html_join(
-        '\n',
-        '<script src="{0}"></script>',
-        ((static(filename), ) for filename in js_files)
-    )
-    js_includes += format_html(
+    js_includes = format_html(
         "<script>window.chooserUrls.colourChooser = '{0}';</script>",
         reverse('wagtailcolourpicker:chooser')
     )
@@ -71,7 +46,13 @@ def register_textcolour_feature(features):
         feature_name,
         draftail_features.EntityFeature(
             control,
-            js=['colourpicker/js/chooser.js']
+            js=[
+                'colourpicker/js/chooser.js',
+                'colourpicker/js/colourpicker.js',
+            ],
+            css={
+                'all': ['colourpicker/css/colourpicker.css'],
+            }
         )
     )
 
