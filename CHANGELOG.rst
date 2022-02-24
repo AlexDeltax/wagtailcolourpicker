@@ -2,6 +2,12 @@
 Changelog
 *********
 
+0.0.7rc1
+-----
+
+* Update requirements to wagtail > 2.4, no upper limit
+* Add colourpicker.css and colourpicker.js, per AlexDeltax
+
 0.0.6
 -----
 
