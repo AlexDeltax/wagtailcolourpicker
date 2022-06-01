@@ -2,6 +2,12 @@
 Changelog
 *********
 
+0.0.7
+-----
+
+* Update to wagtail 3.0
+* Fix issue with gettext
+
 0.0.6
 -----
 
